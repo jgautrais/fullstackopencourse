@@ -45,6 +45,8 @@ const PersonsForm = ({
           .update(id, changedPerson)
           .then((response) => {
             setPersons(persons.map((x) => (x.id !== +id ? x : response.data)));
+            setNewName("");
+            setNewNumber("");
           })
           .catch((error) => {
             const message = {
