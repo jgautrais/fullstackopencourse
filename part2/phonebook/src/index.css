@@ -1,0 +1,17 @@
+.notification {
+  padding: 1rem 2%;
+  margin: 0 2% 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  background: antiquewhite;
+}
+
+.notification__error {
+  border: 2px solid red;
+  color: red;
+}
+
+.notification__success {
+  border: 2px solid green;
+  color: green;
+}
