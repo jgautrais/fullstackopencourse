@@ -34,7 +34,6 @@ const PersonsForm = ({
       return;
     } else if (persons.map((x) => x.name).includes(name)) {
       const person = persons.filter((x) => x.name === name)[0];
-      console.log(person.id);
       if (
         window.confirm(
           `${person.name} is already added to phonebook, replace the old number with a new one ?`
@@ -45,7 +44,8 @@ const PersonsForm = ({
         personService
           .update(id, changedPerson)
           .then((response) => {
-            setPersons(persons.map((x) => (x.id !== +id ? x : response.data)));
+            console.log(response);
+            setPersons(persons.map((x) => (x.id !== +id ? x : changedPerson)));
             setNewName("");
             setNewNumber("");
           })
