@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "https://fullstackopencourse.vercel.app/persons/";
+const baseURL = "https://8dyqz-3001.sse.codesandbox.io/persons/";
 
 const getAll = () => {
   const request = axios.get(baseURL);
