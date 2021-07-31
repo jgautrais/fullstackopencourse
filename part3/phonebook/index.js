@@ -5,6 +5,7 @@ const cors = require("cors");
 
 app.set("json spaces", 2);
 app.use(express.json());
+app.use(cors());
 
 morgan.token("body", function (req, res) {
   if (req.method === "POST" || req.method === "PUT") {
@@ -15,8 +16,6 @@ morgan.token("body", function (req, res) {
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
-
-app.use(cors());
 
 let persons = [
   {
