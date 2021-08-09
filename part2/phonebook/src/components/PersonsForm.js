@@ -45,13 +45,13 @@ const PersonsForm = ({
           .update(id, changedPerson)
           .then((response) => {
             console.log(response);
-            setPersons(persons.map((x) => (x.id !== +id ? x : changedPerson)));
+            setPersons(persons.map((x) => (x.id !== id ? x : changedPerson)));
             setNewName("");
             setNewNumber("");
           })
           .catch((error) => {
             const message = {
-              text: `Information of ${changedPerson.name} has already been removed from server`,
+              text: `${error.response.data.error}`,
               type: "error",
             };
             setMessage(message);
@@ -69,17 +69,29 @@ const PersonsForm = ({
       number: number,
     };
 
-    personService.create(newPerson).then((response) => {
-      setPersons(persons.concat(response.data));
-      setNewName("");
-      setNewNumber("");
-      const message = {
-        text: `Added ${response.data.name}`,
-        type: "success",
-      };
-      setMessage(message);
-      setTimeout(() => setMessage(null), 2000);
-    });
+    personService
+      .create(newPerson)
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+        const message = {
+          text: `Added ${response.data.name}`,
+          type: "success",
+        };
+        setMessage(message);
+        setTimeout(() => setMessage(null), 2000);
+      })
+      .catch((error) => {
+        const message = {
+          text: `${error.response.data.error}`,
+          type: "error",
+        };
+        setMessage(message);
+        setTimeout(() => setMessage(null), 2000);
+        personService.getAll().then((book) => setPersons(book));
+        console.log(error.response);
+      });
   };
 
   return (
