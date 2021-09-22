@@ -1,39 +1,36 @@
 const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 
-blogRouter.get('/info', (request, response) => {
-  let date = new Date();
-  Blog.countDocuments().then((result) => {
-    response.send(`<p>Db stores ${result} blogs</p><p>${date.toString()}</p>`);
-  });
+blogRouter.get('/info', async (request, response) => {
+  const date = new Date();
+  const blogCount = await Blog.countDocuments();
+  response.send(
+    `<p>Database stores ${blogCount} blogs</p><p>${date.toString()}</p>`
+  );
 });
 
-blogRouter.get('/', (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs);
-  });
+blogRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({});
+  response.json(blogs);
 });
 
-blogRouter.get('/:id', (request, response, next) => {
+blogRouter.get('/:id', async (request, response) => {
   const id = request.params.id;
-  Blog.findById(id)
-    .then((blog) => {
-      if (blog) {
-        response.json(blog);
-      } else {
-        response.send(`<p>Resource bot found</p>`);
-        response.status(404).end();
-      }
-    })
-    .catch((error) => next(error));
+  const blog = await Blog.findById(id);
+  if (blog) {
+    response.json(blog);
+  } else {
+    response.send('<p>Resource bot found</p>');
+    response.status(404).end();
+  }
 });
 
-blogRouter.post('/', (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body);
 
-  blog.save().then((result) => {
-    response.status(201).json(result);
-  });
+  const savedBlog = await blog.save();
+
+  response.status(201).json(savedBlog);
 });
 
 module.exports = blogRouter;
