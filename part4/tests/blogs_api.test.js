@@ -36,17 +36,9 @@ describe('making HTTP POST request to db', () => {
     await blog.save();
 
     const response = await api.get('/api/blogs');
-    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-    expect(response.body[6].title).toContain('New blog');
-  });
-
-  test('content of blog post is correctly saved to db', async () => {
-    const blog = helper.newBlog;
-
-    await blog.save();
-
-    const response = await api.get('/api/blogs');
-    expect(response.body[6].title).toContain('New blog');
+    const length = helper.initialBlogs.length;
+    expect(response.body).toHaveLength(length + 1);
+    expect(response.body[length].title).toContain('New blog');
   });
 });
 
@@ -74,6 +66,14 @@ describe('if url is empty, respond 400 Bad Request', () => {
     const blog = helper.newBlogWithOutUrl;
 
     await api.post('/api/blogs').send(blog).expect(400);
+  });
+});
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blog = helper.initialBlogs[1];
+
+    await api.delete(`/api/blogs/${blog._id}`).expect(204);
   });
 });
 
